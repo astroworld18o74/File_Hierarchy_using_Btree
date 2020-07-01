@@ -54,7 +54,7 @@ class Btree{
 
             //Allocate memory for root
             root=new BTreeNode(t,true);
-            root.keys[0]=k; // Insery key
+            root.keys[0]=k; // Insert key
             root.n=1;// Update number of keys in root
         }
         else{ //If tree is not empty
