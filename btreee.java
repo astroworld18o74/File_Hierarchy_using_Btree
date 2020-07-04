@@ -29,12 +29,16 @@ public:
     //BTreeNode os_btreenode;
     OS(){
         //every new OS will have it's btree object
-        os_btree=BTree();
+        os_btree=BTree(3);
         //os_btreenode=BTreeNode();
     }
     //operations on the file
     void add_file(string, double);
-    void search_file(string, double);
+    BTreeNode * search_file(string name , double size){
+        File temp=File(name,size);
+
+    return os_btree.search(temp);
+    };
     void show_files();
 };
 
@@ -47,11 +51,7 @@ void OS :: add_file(string name, double size){
 }
 
 
-void OS :: search_file(string name,double size){
-    File temp=File(name,size);
 
-    os_btree.search(temp);
-}
 
 void OS :: show_files(){
     os_btree.traverse();
@@ -292,7 +292,15 @@ void BTreeNode :: splitChild(int i, BTreeNode *y){
 
 int main(){
     OS windows;
-    windows.add_file(sahil.txt,1000);
-    windows.add_file()
+    windows.add_file("sahil.txt",1000);
+    windows.add_file("ram.txt",2000);
+    windows.add_file("aditi.txt",1001);
+    windows.add_file("sumati.txt",2001);
+    
+    windows.show_files();
+    File temp=File("sahil.txt",1000);
+    if(windows.search_file(temp.file_name,temp.file_size)!=NULL) cout<<"Present"<<endl;
+    else cout<<"Not Present"<<endl;
+    
     return 0;
 }
