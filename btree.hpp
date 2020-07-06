@@ -1,112 +1,55 @@
-#include<bits/stdc++.h>
+# pragma once
+#include "file.hpp"
 using namespace std;
 
-class File{
-public:
-    string file_name;
-    double file_size;
-
-    //Constructor
-    File(string name, double size){
-        file_name=name;
-        file_size=size;
-    }
-    //default constructor for file class
-    File(){
-        file_name="";
-        file_size=0;
-    }
-    //normal file functions
-    void rename();
-    void change_size();
-};
-
-//for any OS we can add , delete ,search files
-class OS{
-    //create a btree for every OS
-public:
-    BTree os_btree;
-    //BTreeNode os_btreenode;
-    OS(){
-        //every new OS will have it's btree object
-        os_btree=BTree(3);
-        //os_btreenode=BTreeNode();
-    }
-    //operations on the file
-    void add_file(string, double);
-    BTreeNode * search_file(string name , double size){
-        File temp=File(name,size);
-
-    return os_btree.search(temp);
-    };
-    void show_files();
-};
-
-
-void OS :: add_file(string name, double size){
-    File temp=File(name , size);
-     
-    //insert that file to the btree of this os
-    os_btree.insert(temp);
-}
-
-
-
-
-void OS :: show_files(){
-    os_btree.traverse();
-}
-
-//A BTreeNode
 class BTreeNode{
     File *keys; // An array of files
     int t;// Minimum degree(defines the range for number of keys)
     BTreeNode **C;//An array of child pointers
     int n; //Current number of keys
     bool leaf;//is true when node is leaf. Otherwise false
-public:
-    BTreeNode(int _t,bool leaf);//Constructor
-    
-    //An utility function to insert a new key in thw subtree rooted with this node.
-    //The assumption is ,the node must be non-full when this
-    //function is called
-    void insertNonFull(File);
 
-    //An utility function to split the child y of this node. i is index of y in
-    //child array C[].The child must be full when this function is called.
-    void splitChild(int i, BTreeNode *y);
+    public:
+        BTreeNode(int _t,bool leaf);//Constructor
+        
+        //An utility function to insert a new key in thw subtree rooted with this node.
+        //The assumption is ,the node must be non-full when this
+        //function is called
+        void insertNonFull(File);
 
-    //A function to traverse all nodes in a subtree rooted with this node
-    void traverse();
+        //An utility function to split the child y of this node. i is index of y in
+        //child array C[].The child must be full when this function is called.
+        void splitChild(int i, BTreeNode *y);
 
-    //A function to search a file in the subtree rooted  with this node.
-    BTreeNode *search(File);// returns NULL if k is not present.
+        //A function to traverse all nodes in a subtree rooted with this node
+        void traverse();
 
-    //Make BTree friend of this so that we can access the private mwmbers of this \
-    //class in BTree functions
-    friend class BTree;
+        //A function to search a file in the subtree rooted  with this node.
+        BTreeNode *search(File);// returns NULL if k is not present.
+
+        //Make BTree friend of this so that we can access the private mwmbers of this \
+        //class in BTree functions
+        friend class BTree;
 };
 
-
-// A BTree
 class BTree{
     BTreeNode *root;  //Pointer to root node
     int t; //Minimum degree
 
-public:
-    //Constructor (initialises tree as empty)
-    BTree(int _t){root=NULL; t=_t;}
-    
-    //default constructor for BTree class
-    BTree(){root=NULL; t=0;}
+    public:
+        BTree(int _t){root=NULL; t=_t;}
+        
+        //default constructor for BTree class
+        BTree(){root=NULL; t=0;}
 
-    //function to search a file in this tree
-    BTreeNode * search(File k){
-        return (root==NULL)?NULL :root->search(k);
-    }
+        //function to search a file in this tree
+        BTreeNode * search(File k){
+            return (root==NULL)?NULL :root->search(k);
+        }
 
-    //The main function that inserts a new file in this B-tree
-    void insert(File k);
+        //The main function that inserts a new file in this B-tree
+        void insert(File k);
+        void traverse();
 };
 
 //Constructor for BTreeNode class
@@ -290,17 +233,3 @@ void BTreeNode :: splitChild(int i, BTreeNode *y){
     n+=1;
 }
 
-int main(){
-    OS windows;
-    windows.add_file("sahil.txt",1000);
-    windows.add_file("ram.txt",2000);
-    windows.add_file("aditi.txt",1001);
-    windows.add_file("sumati.txt",2001);
-    
-    windows.show_files();
-    File temp=File("sahil.txt",1000);
-    if(windows.search_file(temp.file_name,temp.file_size)!=NULL) cout<<"Present"<<endl;
-    else cout<<"Not Present"<<endl;
-    
-    return 0;
-}
