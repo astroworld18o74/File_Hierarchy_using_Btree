@@ -1,15 +1,19 @@
 #pragma once
-#include <iostream>
+#include <bits/stdc++.h>
 
 class File{
 public:
-    std::string file_name = "";
-    double file_size = 0;
+    string file_name;
+    double file_size;
 
-    File(){}
-    File(std::string name, double size):file_name(name), file_size(size){}
-
-    //normal file functions
-    void rename();
-    void change_size();
+    File(string name, double size){
+        file_name=name;
+        file_size=size;
+    }
+    
+    File(){
+        file_name="";
+        file_size=0;
+    }
 };
+
