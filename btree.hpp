@@ -50,18 +50,11 @@ class BTree{
 public:
     BTree(int _t){root=NULL; t=_t;}
     
-    //default constructor for BTree class
     BTree(){root=NULL; t=0;}
-
-    //function to search a file in this tree
     BTreeNode * search(File k){
         return (root==NULL)?NULL :root->search(k);
     }
-
-    //The main function that inserts a new file in this B-tree
-    void insert(File k);
-    
-    // function to traverse the tree 
+    void insert(File k); 
     void traverse() 
     {  if (root != NULL) root->traverse(); } 
     
@@ -98,9 +91,6 @@ void BTreeNode :: remove(File file){
     
     //the key to be removed is present in this node
     if(idx<n && keys[idx].file_size==file.file_size && keys[idx].file_name==file.file_name){
-        
-        //if the node is a leaf node -removeFromLeaf is called 
-        //otherwise , removeFromNonLeaf function is called
         if(leaf) removeFromLeaf(idx);
         else removeFromNonLeaf(idx);
     }
@@ -130,7 +120,6 @@ void BTreeNode :: remove(File file){
     return;
 }
 
-//A function to remove the idx-th key from this node -which is a leaf node
 void BTreeNode :: removeFromLeaf(int idx){
     
     //Move all the keys after the idx-th pos one place backward
@@ -235,15 +224,8 @@ void BTreeNode :: borrowFromPrev(int idx){
     if(!child->leaf){
         for(int i=child->n ;i>=0;i--) child->C[i+1]=child->C[i];
     }
-    
-    //Setting child's first key equal to keys[idx-1] from the current nodes
     child->keys[0]=keys[idx-1];
-    
-    //moving sibling's last child as C[idx]'s first child
     if(!child->leaf) child->C[0]=sibling->C[sibling->n];
-    
-    //moving the file from sibling to the parent 
-    //this reduces the number of files in the sibling
     keys[idx-1]=sibling->keys[sibling->n-1];
     
     child->n+=1;
@@ -302,13 +284,9 @@ void BTreeNode :: merge(int idx){
         for(int i=0;i<=sibling->n;i++) child->C[i+t]=sibling->C[i];
     }
     
-    // Moving all keys after idx in the current node one step before - 
-    // to fill the gap created by moving keys[idx] to C[idx] 
     for (int i=idx+1; i<n; ++i) 
         keys[i-1] = keys[i]; 
   
-    // Moving the child pointers after (idx+1) in the current node one 
-    // step before 
     for (int i=idx+2; i<=n; ++i) 
         C[i-1] = C[i]; 
   
@@ -330,8 +308,6 @@ void BTreeNode :: traverse(){
     int i;
     for(int i=0;i<n;i++){
 
-        //If this is not leaf, then before printing key[i],
-        //traverse the subtree rooted with child C[i].
         if(leaf==false){
             C[i]->traverse();
         }
@@ -397,11 +373,7 @@ void BTree :: insert(File file){
             //Make old root as child of new root
             s->C[0]=root;
 
-            //Split the old root and move 1 key to the new root
             s->splitChild(0,root);
-
-            //new root has two children now. Decide which of the
-            //two children is going to have new key
             int i=0;
             if(s->keys[0].file_size<file.file_size) i++;
 
@@ -416,9 +388,7 @@ void BTree :: insert(File file){
     }
 }
 
-// A utility function to insert a new key in this node
-// The assumption is, the node must be non-full when this
-//function is called
+
 void BTreeNode :: insertNonFull(File file){
     
     //Initialise index as index of rightmost element
@@ -434,9 +404,6 @@ void BTreeNode :: insertNonFull(File file){
             i--;
         }
 
-        //insert the new key at found location
-        //if there are multiple keys or files of the same size then this
-        //function inserts the new key at the end of all those keys
         keys[i+1]=file;
         n=n+1;
     } 
@@ -449,10 +416,6 @@ void BTreeNode :: insertNonFull(File file){
         if(C[i+1]->n == 2*t-1){
             // if the child is full the split it
             splitChild(i+1,C[i+1]);
-
-            //after split, the middle file of C[i] ges upa nd 
-            //C[i] is splitted into two. See which of the two 
-            // is going to have the new key
             if(keys[i+1].file_size<file.file_size)i++;
         }
         C[i+1]->insertNonFull(file);
