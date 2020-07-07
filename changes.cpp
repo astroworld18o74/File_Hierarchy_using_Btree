@@ -16,9 +16,6 @@ public:
         file_name="";
         file_size=0;
     }
-    //normal file functions
-    void rename();
-    void change_size();
 };
 
 //A BTreeNode
