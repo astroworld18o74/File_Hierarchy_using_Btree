@@ -23,7 +23,9 @@ int main(){
             double filesize;
             cout<<"Enter the file size:";
             cin>>filesize;
-            windows.add_file(filename,filesize);
+            if(windows.search_file(filename,filesize)==NULL)
+                windows.add_file(filename,filesize);
+            else cout<<"\nThis file is already present."<<endl;
         }
         
         else if(n==2){
